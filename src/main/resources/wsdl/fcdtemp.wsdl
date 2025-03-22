@@ -1,0 +1,68 @@
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+                  xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+                  xmlns:tns="http://efe-7papps001.dev.mtb.com"
+                  xmlns:xs="http://www.w3.org/2001/XMLSchema"
+                  xmlns:sch="efe:cms"
+                  targetNamespace="http://efe-7papps001.dev.mtb.com">
+
+    <!-- Types section with inline schema definitions -->
+    <wsdl:types>
+        <xs:schema elementFormDefault="qualified" targetNamespace="http://efe-7papps001.dev.mtb.com">
+            <!-- Define CMSRequestPartyAccount complex type -->
+            <xs:complexType name="CMSRequestPartyAccount">
+                <xs:sequence>
+                    <xs:element name="ACCOUNT_NUMBER" type="xs:string"/>
+                </xs:sequence>
+            </xs:complexType>
+
+            <!-- Define CMSData complex type -->
+            <xs:complexType name="CMSData">
+                <xs:sequence>
+                    <xs:element name="CARD_MAINTAINCE_TYPES" type="xs:string"/>
+                    <xs:element minOccurs="10" maxOccurs="10" name="CMS_REQUEST_PARTY_ACCOUNT" type="tns:CMSRequestPartyAccount"/>
+                </xs:sequence>
+            </xs:complexType>
+
+            <!-- Define sendCMSRequest complex type -->
+            <xs:complexType name="SendCMSRequestType">
+                <xs:sequence>
+                    <xs:element name="CMSData" type="tns:CMSData"/>
+                </xs:sequence>
+            </xs:complexType>
+
+            <!-- Define the sendCMSRequest element -->
+            <xs:element name="sendCMSRequest" type="tns:SendCMSRequestType"/>
+        </xs:schema>
+    </wsdl:types>
+
+    <!-- Define the message part referencing the sendCMSRequest element -->
+    <wsdl:message name="sendCMSRequest">
+        <wsdl:part element="tns:sendCMSRequest" name="sendCMSRequest"/>
+    </wsdl:message>
+
+    <!-- Define the portType -->
+    <wsdl:portType name="CMSPortType8082">
+        <wsdl:operation name="sendCMS">
+            <wsdl:input message="tns:sendCMSRequest" name="sendCMSRequest"/>
+        </wsdl:operation>
+    </wsdl:portType>
+
+    <!-- Define the binding for soap -->
+    <wsdl:binding name="CMSBinding8082" type="tns:CMSPortType8082">
+        <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+        <wsdl:operation name="sendCMS">
+            <soap:operation soapAction=""/>
+            <wsdl:input name="sendCMSRequest">
+                <soap:body use="literal"/>
+            </wsdl:input>
+        </wsdl:operation>
+    </wsdl:binding>
+
+    <!-- Define the service and endpoint address -->
+    <wsdl:service name="CMSService8082">
+        <wsdl:port binding="tns:CMSBinding8082" name="CMSPort8082">
+            <soap:address location="http://localhost:8082/ws"/>
+        </wsdl:port>
+    </wsdl:service>
+
+</wsdl:definitions>
